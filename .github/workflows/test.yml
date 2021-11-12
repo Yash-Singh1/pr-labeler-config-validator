@@ -10,16 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm install
-      - run: npm run all
-      - uses: ./
-      - uses: ./
+      - name: Install Dependencies
+        run: npm install
+      - name: Run build linting and tests
+        run: npm run all
+      - name: Load without token or configuration path
+        uses: ./
+      - name: Load without token
+        uses: ./
         with:
           configuration-path: __tests__/pr-labeler.yml
-      - uses: ./
+      - name: Load without configuration path
+        uses: ./
         env:
           GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
-      - uses: ./
+      - name: Load with token and configuration path
+        uses: ./
         with:
           configuration-path: __tests__/pr-labeler.yml
         env:
