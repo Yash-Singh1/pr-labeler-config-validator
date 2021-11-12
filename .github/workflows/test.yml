@@ -18,9 +18,9 @@ jobs:
           configuration-path: __tests__/pr-labeler.yml
       - uses: ./
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
       - uses: ./
         with:
           configuration-path: __tests__/pr-labeler.yml
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
