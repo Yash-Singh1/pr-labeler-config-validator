@@ -23,10 +23,14 @@ function getSetupArgs(
           headers?: Record<string, unknown>
         ): Promise<T> => {
           expect(url).toEqual(`${apiURL}/repos/${repo}/labels`);
+          const defaultHeaders = { 'User-Agent': 'node.js' };
           if (authToken) {
-            expect(headers).toEqual({ Authentication: authToken });
+            expect(headers).toEqual({
+              Authentication: authToken,
+              ...defaultHeaders
+            });
           } else {
-            expect(headers).toBeUndefined();
+            expect(headers).toEqual(defaultHeaders);
           }
           return labels.map((label) => ({
             name: label

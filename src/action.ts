@@ -7,11 +7,12 @@ async function action(
 ): Promise<void> {
   process.stdout.write('Fetching repository labels...');
 
+  const defaultHeaders = { 'User-Agent': 'node.js' };
   const labels = await httpClient.getJson<Labels>(
     `${process.env.GITHUB_API_URL}/repos/${process.env.GITHUB_REPOSITORY}/labels`,
     process.env.GITHUB_TOKEN
-      ? { Authorization: process.env.GITHUB_TOKEN }
-      : undefined
+      ? { Authorization: process.env.GITHUB_TOKEN, ...defaultHeaders }
+      : defaultHeaders
   );
 
   console.log('done');
