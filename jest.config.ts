@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   clearMocks: true,
   moduleFileExtensions: ['js', 'ts'],
   testMatch: ['**/*.test.ts'],
@@ -6,4 +6,6 @@ module.exports = {
     '^.+\\.ts$': 'ts-jest'
   },
   verbose: true
-}
+};
+
+export default config;

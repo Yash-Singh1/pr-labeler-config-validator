@@ -1,43 +1,50 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "pr-labeler-config-validator",
+  "version": "0.0.1",
   "private": true,
-  "description": "TypeScript template action",
-  "main": "lib/main.js",
+  "description": "PR Labeler Config Validator",
+  "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write '**/*.ts'",
-    "format-check": "prettier --check '**/*.ts'",
-    "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "format": "prettier --write .",
+    "format-check": "prettier --check .",
+    "lint:fix": "eslint ./ --fix",
+    "lint": "eslint ./__tests__/**/*.ts ./src/**/*.ts jest.config.ts",
+    "package": "ncc build",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "npm run build && npm run format && npm run lint && npm run lint:fix && npm run package && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/Yash-Singh1/pr-labeler-config-validator.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "Yash Singh",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "@actions/http-client": "^1.0.11",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/js-yaml": "^4.0.4",
     "@types/node": "^16.10.5",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.0.0",
     "@vercel/ncc": "^0.31.1",
     "eslint": "^7.32.0",
-    "eslint-plugin-github": "^4.3.2",
+    "eslint-plugin-github": "4.3.2",
     "eslint-plugin-jest": "^25.0.5",
     "jest": "^27.2.5",
-    "js-yaml": "^4.1.0",
     "prettier": "2.4.1",
     "ts-jest": "^27.0.5",
+    "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   }
 }

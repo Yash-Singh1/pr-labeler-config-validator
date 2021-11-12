@@ -1,11 +1,11 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'PR Labeler Config Validator'
+description: 'Validates configuration that is passed to PR Labeler'
+author: 'Yash-Singh1'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  configuration-path:
+    required: false
+    description: 'string to the configuration file to read'
+    default: '.github/pr-labeler.yml'
 runs:
   using: 'node12'
   main: 'dist/index.js'

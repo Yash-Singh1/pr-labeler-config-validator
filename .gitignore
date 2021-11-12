@@ -1,5 +1,10 @@
-# Dependency directory
-node_modules
+# Dependencies
+node_modules/
+package-lock.json
+
+# Builds
+dist/
+lib/
 
 # Rest pulled from https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
