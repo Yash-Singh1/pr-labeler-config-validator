@@ -21,7 +21,7 @@ function getSetupArgs(
         async <T>(
           url: string,
           headers?: Record<string, unknown>
-        ): Promise<T> => {
+        ): Promise<{ result: T }> => {
           expect(url).toEqual(`${apiURL}/repos/${repo}/labels`);
           const defaultHeaders = { 'User-Agent': 'node.js' };
           if (authToken) {
@@ -32,9 +32,11 @@ function getSetupArgs(
           } else {
             expect(headers).toEqual(defaultHeaders);
           }
-          return labels.map((label) => ({
-            name: label
-          })) as unknown as T;
+          return {
+            result: labels.map((label) => ({
+              name: label
+            })) as unknown as T
+          };
         }
       )
     } as unknown as HttpClient,

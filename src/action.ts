@@ -31,7 +31,7 @@ async function action(
 
   process.stdout.write('Validating config...');
 
-  if (!validate(config, labels as unknown as Labels)) {
+  if (!validate(config, labels.result as Labels)) {
     process.exit(1);
   } else {
     console.log('done');
