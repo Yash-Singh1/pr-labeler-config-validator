@@ -28,7 +28,14 @@ async function action(
 
   const config = yaml.load(
     readFileSync(
-      path.join(process.env.GITHUB_WORKSPACE || '.', configFile),
+      configFile.startsWith('/')
+        ? configFile
+        : path.join(
+            process.env.GITHUB_WORKSPACE
+              ? `/${process.env.GITHUB_WORKSPACE}`
+              : '.',
+            configFile
+          ),
       'utf-8'
     )
   );

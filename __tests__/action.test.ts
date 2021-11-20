@@ -44,7 +44,7 @@ function getSetupArgs(
       getInput: jest.fn(() => testConfigFile)
     } as unknown as Core,
     function (pathTo: string, type: BufferEncoding) {
-      expect(pathTo).toEqual(testConfigFile);
+      expect(path.resolve(pathTo)).toEqual(path.resolve(testConfigFile));
       expect(type).toEqual('utf-8');
       return readFileSync(pathTo, type);
     } as ReadFileSync,
@@ -122,47 +122,58 @@ describe('action', () => {
 
   describe('fails with invalid configuration', () => {
     const invalidDir = path.join(__dirname, 'invalid/');
-    for (const dir of readdirSync(invalidDir)) {
-      it(`fails with ${dir}`, (done) => {
-        const invalidSubDirectory = path.join(invalidDir, dir);
-        const setupArgs = getSetupArgs(
-          'Yash-Singh1/pr-labeler-config-validator',
-          'default',
-          path.join(invalidSubDirectory, 'pr-labeler.yml'),
-          existsSync(path.join(invalidSubDirectory, 'labels.json'))
-            ? JSON.parse(
-                readFileSync(
-                  path.join(invalidSubDirectory, 'labels.json'),
-                  'utf-8'
-                )
-              )
-            : [],
-          existsSync(path.join(invalidSubDirectory, 'token.txt'))
-            ? readFileSync(path.join(invalidSubDirectory, 'token.txt'), 'utf-8')
-            : undefined
-        );
+    for (const exactOrNot of [false, true]) {
+      describe(exactOrNot ? 'exact paths' : 'relative paths', () => {
+        for (const dir of readdirSync(invalidDir)) {
+          it(`fails with ${dir}`, (done) => {
+            const invalidSubDirectory = path.join(invalidDir, dir);
+            const configFilePath = path.join(
+              invalidSubDirectory,
+              'pr-labeler.yml'
+            );
+            const setupArgs = getSetupArgs(
+              'Yash-Singh1/pr-labeler-config-validator',
+              'default',
+              exactOrNot ? configFilePath : path.resolve(configFilePath),
+              existsSync(path.join(invalidSubDirectory, 'labels.json'))
+                ? JSON.parse(
+                    readFileSync(
+                      path.join(invalidSubDirectory, 'labels.json'),
+                      'utf-8'
+                    )
+                  )
+                : [],
+              existsSync(path.join(invalidSubDirectory, 'token.txt'))
+                ? readFileSync(
+                    path.join(invalidSubDirectory, 'token.txt'),
+                    'utf-8'
+                  )
+                : undefined
+            );
 
-        action(...setupArgs).then(() => {
-          expect(console.log).toHaveBeenNthCalledWith(1, 'done');
-          expect(console.log).toHaveBeenNthCalledWith(2, 'done');
-          expect(console.log).toHaveBeenCalledTimes(3);
-          expect(setupArgs[3].stdout.write).toHaveBeenNthCalledWith(
-            1,
-            'Fetching repository labels...'
-          );
-          expect(setupArgs[3].stdout.write).toHaveBeenNthCalledWith(
-            2,
-            'Reading configuration file...'
-          );
-          expect(setupArgs[3].stdout.write).toHaveBeenNthCalledWith(
-            3,
-            'Validating config...'
-          );
-          expect(setupArgs[3].stdout.write).toHaveBeenCalledTimes(3);
-          expect(setupArgs[0].getJson).toHaveBeenCalled();
-          expect(setupArgs[3].exit).toHaveBeenCalledWith(1);
-          done();
-        });
+            action(...setupArgs).then(() => {
+              expect(console.log).toHaveBeenNthCalledWith(1, 'done');
+              expect(console.log).toHaveBeenNthCalledWith(2, 'done');
+              expect(console.log).toHaveBeenCalledTimes(3);
+              expect(setupArgs[3].stdout.write).toHaveBeenNthCalledWith(
+                1,
+                'Fetching repository labels...'
+              );
+              expect(setupArgs[3].stdout.write).toHaveBeenNthCalledWith(
+                2,
+                'Reading configuration file...'
+              );
+              expect(setupArgs[3].stdout.write).toHaveBeenNthCalledWith(
+                3,
+                'Validating config...'
+              );
+              expect(setupArgs[3].stdout.write).toHaveBeenCalledTimes(3);
+              expect(setupArgs[0].getJson).toHaveBeenCalled();
+              expect(setupArgs[3].exit).toHaveBeenCalledWith(1);
+              done();
+            });
+          });
+        }
       });
     }
   });
