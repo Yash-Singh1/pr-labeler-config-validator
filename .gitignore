@@ -2,10 +2,6 @@
 node_modules/
 package-lock.json
 
-# Builds
-dist/
-lib/
-
 # Rest pulled from https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
 logs
@@ -101,4 +97,3 @@ Thumbs.db
 
 # Ignore built ts files
 __tests__/runner/*
-lib/**/*
