@@ -1,5 +1,6 @@
 import type ActionArgs from './action-args';
 import type { Labels } from './labels';
+import path from 'path';
 import yaml from 'js-yaml';
 
 async function action(
@@ -25,7 +26,12 @@ async function action(
     throw new Error('Passed configuration file must be a string...');
   }
 
-  const config = yaml.load(readFileSync(configFile, 'utf-8'));
+  const config = yaml.load(
+    readFileSync(
+      path.join(process.env.GITHUB_WORKSPACE || '.', configFile),
+      'utf-8'
+    )
+  );
 
   console.log('done');
 
