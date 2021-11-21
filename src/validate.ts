@@ -4,7 +4,7 @@ export function allStrings(array: any[]): boolean {
   return array.every((value) => typeof value === 'string');
 }
 
-export default function validate(config: any, labels: Labels): boolean {
+export default function validate(config: any, labels: Labels | null): boolean {
   let logs = '';
   let valid = true;
 
@@ -33,10 +33,12 @@ export default function validate(config: any, labels: Labels): boolean {
       }
     }
 
-    for (const key of keys) {
-      if (!labels.find((label) => label.name === key)) {
-        invalidate();
-        logs += `\t❌ Couldn't find label "${key}"\n`;
+    if (labels) {
+      for (const key of keys) {
+        if (!labels.find((label) => label.name === key)) {
+          invalidate();
+          logs += `\t❌ Couldn't find label "${key}"\n`;
+        }
       }
     }
   }

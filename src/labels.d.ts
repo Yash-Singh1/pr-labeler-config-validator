@@ -1,4 +1,4 @@
-export type Labels = {
+export type Label = {
   id: number;
   node_id: string;
   url: string;
@@ -6,4 +6,6 @@ export type Labels = {
   color: string;
   default: boolean;
   description: string;
-}[];
+};
+
+export type Labels = Label[];

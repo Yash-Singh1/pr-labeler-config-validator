@@ -1,5 +1,5 @@
 import type ActionArgs from './action-args';
-import type { Labels } from './labels';
+import getLabels from './get-labels';
 import path from 'path';
 import yaml from 'js-yaml';
 
@@ -8,17 +8,7 @@ async function action(
 ): Promise<void> {
   process.stdout.write('Fetching repository labels...');
 
-  const defaultHeaders = { 'User-Agent': 'node.js' };
-  const labels = await httpClient
-    .getJson<Labels>(
-      `${process.env.GITHUB_API_URL}/repos/${process.env.GITHUB_REPOSITORY}/labels`,
-      process.env.GITHUB_TOKEN
-        ? { Authorization: process.env.GITHUB_TOKEN, ...defaultHeaders }
-        : defaultHeaders
-    )
-    .catch((err) => {
-      throw err;
-    });
+  const labels = await getLabels(httpClient, process);
 
   console.log('done');
 
@@ -48,7 +38,7 @@ async function action(
 
   process.stdout.write('Validating config...');
 
-  if (!validate(config, labels.result as Labels)) {
+  if (!validate(config, labels)) {
     process.exit(1);
   } else {
     console.log('done');

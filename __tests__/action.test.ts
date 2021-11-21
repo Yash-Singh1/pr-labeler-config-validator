@@ -2,6 +2,7 @@ import type { Core, Process, ReadFileSync } from '../src/action-args';
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import type ActionArgs from '../src/action-args';
 import { HttpClient } from '@actions/http-client';
+import type { Labels } from '../src/labels';
 import action from '../src/action';
 import path from 'path';
 import validate from '../src/validate';
@@ -14,15 +15,27 @@ function getSetupArgs(
   authToken?: string
 ): ActionArgs {
   const apiURL = 'https://api.github.com';
+  const queriedPages: string[] = [];
+  const maxQuery = Math.ceil(labels.length / 9) + 2;
 
   return [
     {
       getJson: jest.fn(
-        async <T>(
+        async (
           url: string,
           headers?: Record<string, unknown>
-        ): Promise<{ result: T }> => {
-          expect(url).toEqual(`${apiURL}/repos/${repo}/labels`);
+        ): Promise<{ result: Labels }> => {
+          queriedPages.push(url);
+          if (url.endsWith(maxQuery.toString())) {
+            for (const [
+              queriedPageNumber,
+              queriedPage
+            ] of queriedPages.entries()) {
+              expect(queriedPage).toEqual(
+                `${apiURL}/repos/${repo}/labels?page=${queriedPageNumber + 1}`
+              );
+            }
+          }
           const defaultHeaders = { 'User-Agent': 'node.js' };
           if (authToken) {
             expect(headers).toEqual({
@@ -32,10 +45,19 @@ function getSetupArgs(
           } else {
             expect(headers).toEqual(defaultHeaders);
           }
+          const urlPartsSliceEndIndex =
+            +url
+              .split('=')
+              .find(
+                (_urlPart, urlPartIndex, urlParts) =>
+                  urlPartIndex === urlParts.length - 1
+              )! * 9;
           return {
-            result: labels.map((label) => ({
-              name: label
-            })) as unknown as T
+            result: (
+              labels.map((label) => ({
+                name: label
+              })) as unknown as Labels
+            ).slice(urlPartsSliceEndIndex - 9, urlPartsSliceEndIndex)
           };
         }
       )

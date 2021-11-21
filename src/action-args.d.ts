@@ -1,5 +1,5 @@
 import * as Core from '@actions/core';
-import { HttpClient } from '@actions/http-client';
+import type { HttpClient } from '@actions/http-client';
 import process from 'process';
 import { readFileSync } from 'fs';
 import validate from './validate';
