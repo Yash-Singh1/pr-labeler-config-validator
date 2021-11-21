@@ -1,6 +1,6 @@
 {
   "name": "pr-labeler-config-validator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "description": "PR Labeler Config Validator",
   "main": "src/index.ts",
