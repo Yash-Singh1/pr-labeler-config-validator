@@ -12,7 +12,7 @@
     "lint": "eslint ./__tests__/**/*.ts ./src/**/*.ts jest.config.ts",
     "package": "ncc build",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run lint:fix && npm run package && npm test"
+    "all": "npm run build && npm run format-check && npm run format && npm run lint && npm run lint:fix && npm run package && npm test"
   },
   "repository": {
     "type": "git",
