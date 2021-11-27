@@ -4,7 +4,7 @@ A configuration validator for the [PR Labeler GitHub Action](https://github.com/
 
 ## Usage
 
-You can optionally set the `GITHUB_TOKEN` environment variable for API calls to be authorized.
+GitHub automatically generates a `GITHUB_TOKEN` secret when your workflow runs.
 
 ```yaml
 name: Validate PR Labeler Configuration
@@ -19,7 +19,7 @@ jobs:
         with:
           configuration-path: .github/pr-labeler.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Features
