@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate Configuration
-        uses: Yash-Singh1/pr-labeler-config-validator@releases/v0.0.3
+        uses: Yash-Singh1/pr-labeler-config-validator@releases/v0.0.4
         with:
           configuration-path: .github/pr-labeler.yml
         env:
